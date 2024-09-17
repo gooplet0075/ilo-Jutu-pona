@@ -1,0 +1,25 @@
+@font-face {
+    font-family: nasin-nanpa;
+    src: url('chrome-extension://__MSG_@@extension_id__/fonts/nasin-nanpa-3.1.0.otf');
+    /*src: url('https://github.com/ETBCOR/nasin-nanpa/releases/download/n4.0.1/nasin-nanpa-4.0.1.otf')*/
+}
+
+.propernoun {
+    font-family: "Comic Sans MS", "Comic Sans", cursive;
+    font-weight: normal;
+}
+
+#chat ul {
+    list-style-type: none;
+    list-style-position: outside;
+    padding: 0;
+    margin: 0;
+}
+
+#chat li {
+    background-color: rgba(0, 0, 0, 0.75);
+    box-sizing: border-box;
+    padding: 0;
+    font-size: 28px;
+    font-weight: bold;
+}
