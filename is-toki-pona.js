@@ -33,8 +33,6 @@ async function isTokiPona(message) {
   const messageNoPunctuation = message.replace(nonLetterRegexp, ' ')
   const words = messageNoPunctuation.split(/\s+/).filter((element) => { return element !== "" })
 
-  //console.log('list of words:', words)
-
   let tokiPonaWordCount = 0
   let properNounCount = 0
 
@@ -49,8 +47,8 @@ async function isTokiPona(message) {
       return false
     }
 
-    if (word.substring(1) !== word.substring(1).toLowerCase()) {
-      //console.log('found capitalized noun after first letter: ', word)
+    if (word.substring(1) === word.substring(1).toUpperCase()) {
+      //console.log('word is all-caps: ', word)
       return false
     }
 
@@ -58,13 +56,9 @@ async function isTokiPona(message) {
       //console.log('word contains forbidden sequence: ', word)
       return false
     }
-
     properNounCount++
   }
-
-  //console.log(`toki pona words: ${tokiPonaWordCount}, proper nouns: ${properNounCount}`)
-  return [tokiPonaWordCount >= properNounCount, words] 
-  //turned return statement into a list, since it turns out we seem to need both the boolean and the list of words
+  return tokiPonaWordCount >= properNounCount
 }
 
 window.addEventListener('load', async () => {

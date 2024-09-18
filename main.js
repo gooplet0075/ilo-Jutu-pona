@@ -2,7 +2,9 @@ const observer = new MutationObserver(async function(mutations_list) {
 	mutations_list.forEach(async function(mutation) {
 		mutation.addedNodes.forEach(async function(added_node) {
 			if(added_node.tagName == 'YT-LIVE-CHAT-TEXT-MESSAGE-RENDERER') {
+                console.log('added_node',added_node)
                 element = document.getElementById(added_node.id);
+                console.log('element',element);
                 removeProfilePicture(element);
                 formatMessage(element);
 			}
@@ -11,17 +13,17 @@ const observer = new MutationObserver(async function(mutations_list) {
 });
 
 async function formatMessage(element) {
-    var message = element.querySelector('#message');
-    var textObjectSegments = Array.from(message.childNodes).filter((segment) => segment.nodeType === Node.TEXT_NODE);
-    var textSegments = [];
-    for (var segment of textObjectSegments) {
-        textSegments.push(segment.textContent);
-    }
-    var messageText = textSegments.join(' ').replace(/\s+/g,' ').trim();
-    var isTokiPonaMessage = await isTokiPona(messageText);
-    if (isTokiPonaMessage[0]) {
-        for (var word of messageText.split(' ')) {
-            var newWord;
+    let message = element.querySelector('#message');
+    const messageText = 
+        Array.from(message.childNodes)
+        .filter((segment) => segment.nodeType === Node.TEXT_NODE)
+        .map((textNodeObject) => textNodeObject.textContent)
+        .join(' ')
+        .replace(/\s+/g,' ')
+        .trim();
+    if (await isTokiPona(messageText)) {
+        for (const word of messageText.split(' ')) {
+            let newWord;
             if ((word[0] != word[0].toLowerCase()) && (word.substring(1) == word.substring(1).toLowerCase())) {
                 newWord = `<span class="propernoun">${word}</span>`;
             } else {
@@ -31,12 +33,10 @@ async function formatMessage(element) {
         }; 
         message.style.fontFamily = 'nasin-nanpa';
     }
-    return logs;
-
 }
 
 async function removeProfilePicture(element) {
-    var profilePicture = element.querySelector('yt-img-shadow');
+    let profilePicture = element.querySelector('yt-img-shadow');
     profilePicture.remove(); //removes pics from existing messages
 }
 
@@ -52,11 +52,10 @@ async function initialize() {
 
     for (message of existingMessages) {
         removeProfilePicture(message);
-        logs = await formatMessage(message);
-        console.log(logs);
+        formatMessage(message);
     };
 }
 
-const init = initialize();
 
+const init = initialize();
 observer.observe(document.getElementsByClassName('style-scope yt-live-chat-item-list-renderer')[5], { subtree: false, childList: true });
